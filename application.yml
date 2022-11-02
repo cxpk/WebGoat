@@ -1,0 +1,188 @@
+server:
+  port: ${PORT:8080}
+
+logging:
+  file: flow.log
+
+cx-flow:
+  contact: admin@cx.com
+  bug-tracker: Json
+  bug-tracker-impl:
+    - CxXml
+    - Csv
+    - Json
+    - GitLab
+    - GitHub
+    - Azure
+    - Rally
+  branches:
+    - develop
+    - main
+    - release`-\w+ # regular expressions supported. If branch-script is provided, this is ignored. branch-script: D:\\tmp\Branch.groovy #default empty/not used
+  filter-severity:
+    - High
+  filter-category:
+    - Stored_XSS
+    - SQL_Injection
+  filter-cwe:
+    - 89
+    - 79
+  filter-status:
+     - New
+     - Reoccured
+  filter-state:
+     - Confirmed
+     - Urgent
+  mitre-url: https://cwe.mitre.org/data/definitions/%s.html
+  wiki-url: https://checkmarx.atlassian.net/wiki/spaces/AS/pages/79462432/Remediation+Guidance
+  track-application-only: false
+  web-hook-queue: 20
+  scan-result-queue: 8
+  break-build: false
+  scan-resubmit: false
+  branch-protection-enabled: false
+  preserve-project-name: false
+  http-connection-timeout: 30000 # milliseconds - default 30000
+  http-read-timeout: 120000 # milliseconds - default 120000
+  zip-exclude: \.git/.*, .*\.png
+  
+checkmarx:
+  version: 9.0 # Not required for CxSAST version 8.x
+  username: ${CxUN}
+  password: ${CxPW}
+  client-secret: xxx
+  base-url: http://3.214.68.128/
+  multi-tenant: true
+  scan-preset: Checkmarx Default
+  configuration: Default Configuration
+  team: /CxServer
+  scan-timeout: 120 # Webhook and --scan command line only, number of minutes
+  jira-project-field: jira-project
+  jira-issuetype-field: jira-issuetype
+  jira-custom-field: jira-fields
+  jira-assignee-field: jira-assignee
+  preserve-xml: true
+  url: ${checkmarx.base-url}/cxrestapi
+  # WSDL Config
+  portal-url: ${checkmarx.base-url}/cxwebinterface/Portal/CxWebService.asmx
+  sdk-url: ${checkmarx.base-url}/cxwebinterface/SDK/CxSDKWebService.asmx
+  portal-wsdl: ${checkmarx.base-url}/Portal/CxWebService.asmx?wsdl
+  sdk-wsdl: ${checkmarx.base-url}/SDK/CxSDKWebService.asmx?wsdl
+  
+  custom-state-map:
+    "5": "SUSPICIOUS"
+  post-action-postback-id: 123456
+  settings-override: true #default false if not provide
+  cx-branch: false
+  scan-queuing: true
+  scan-queuing-timeout: 720 # Webhook and --scan command line only, number of minutes
+  email-notifications:
+    after-scan:
+      - user1@example.com
+    before-scan:
+      - user2@example.com
+    failed-scan:
+      - user3@example.com
+
+github:
+  webhook-token: XXXXX
+  token: XXXXX
+  url: https://github.com
+  api-url: https://api.github.com/repos/
+  false-positive-label: false-positive
+  block-merge: true
+  cx-summary-header: Checkmarx Scan Summary
+  cx-summary: true # default false if not provided
+  flow-summary-header: Violation Summary
+  flow-summary: true # default true if not provided
+  detailed-header: Details
+  detailed: true # default true if not provided
+
+jira:
+  url: https://cxcxcx.atlassian.net
+  username: XXXXX
+  token: XXXXX
+  project: REP
+  issue-type: <JIRA ISSUE TYPE>
+  label-prefix: <CUSTOM PREFIX NAME >
+  priorities:
+     Critical: Highest
+     High: High
+     Medium: Medium
+     Low: Low
+     Informational: Lowest
+  open-transition: In Review
+  close-transition: Done
+  open-status:
+     - To Do
+     - In Progress
+     - In Review
+  closed-status:
+     - Done
+  suppress-code-snippets:
+      - Hardcoded_Password_in_Connection_String
+      - Password_In_Comment
+      - Use_Of_Hardcoded_Password
+  fields:
+     - type: result
+       name: application
+       jira-field-name: Application
+       jira-field-type: label
+     - type: result
+       name: cve
+       jira-field-name: CVEs
+       jira-field-type: label
+     - type: result
+       name: cwe
+       jira-field-name: CWEs
+       jira-field-type: label
+     - type: result
+       name: category
+       jira-field-name: Category
+       jira-field-type: label
+     - type: result
+       name: loc
+       jira-field-name: LOC
+       jira-field-type: label
+       jira-default-value: XXXXX
+
+json:
+  file-name-format: "[NAMESPACE]-[REPO]-[BRANCH]-[TIME].json"
+  data-folder: "C:\\tmp"
+ 
+cx-xml:
+  file-name-format: "[NAMESPACE]-[REPO]-[BRANCH]-[TIME].xml"
+  data-folder: "C:\\tmp"
+
+csv:
+  file-name-format: "[TEAM]-[PROJECT]-[TIME].csv"
+  data-folder: "C:\\tmp"
+  include-header: true
+  fields:
+     - header: Customer field (Application)
+       name: application
+       default-value: unknown
+     - header: Primary URL
+       name: static
+       default-value: ${tmp.url}
+     - header: severity
+       name: severity
+     - header: Vulnerability ID
+       name: summary
+       prefix: "[APP]:"
+     - header: file
+       name: filename
+     - header: Vulnerability ID
+       name: summary
+     - header: Vulnerability Name
+       name: category
+     - header: Category ID
+       name: cwe
+     - header: Description
+       name: summary
+       prefix: "*"
+       postfix: "*"
+     - header: Severity
+       name: severity
+     - header: recommendation
+       name: recommendation
