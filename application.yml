@@ -48,9 +48,9 @@ cx-flow:
   
 checkmarx:
   version: 9.0 # Not required for CxSAST version 8.x
-  username: ${CxUN}
-  password: ${CxPW}
-  client-secret: xxx
+  username: ${{secrets.CxUN}}
+  password: ${{secrets.CxPW}}
+  client-secret: ${{secrets.clientsecret}}
   base-url: http://3.214.68.128/
   multi-tenant: true
   scan-preset: Checkmarx Default
