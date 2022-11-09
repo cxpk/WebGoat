@@ -43,8 +43,8 @@ jobs:
         project: ${{ secrets.CX_PROJECT }}
         team: ${{ secrets.CX_TEAM }}
         checkmarx_url: ${{ secrets.CX_SERVER }}
-        checkmarx_username: ${{ secrets.CX_UN }}
-        checkmarx_password: ${{ secrets.CX_PW}}
+        checkmarx_username: ${{ secrets.CXUN }}
+        checkmarx_password: ${{ secrets.CXPW}}
         checkmarx_client_secret: ${{ secrets.GH_TOKEN }}
         scanners: sast
         params: --namespace=${{ github.repository_owner }} --repo-name=${{ github.event.repository.name }} --branch=${{ github.ref }} --cx-flow.filter-severity --cx-flow.filter-category --checkmarx.disable-clubbing=true --repo-url=${{ github.event.repository.url }}
